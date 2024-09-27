@@ -1,0 +1,84 @@
+.user-guide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+.container {
+  /* display: flex; */
+  width: 100%;
+}
+  .card-container {
+    display: flex;
+    justify-content: center; 
+  }
+  .card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    width: calc(50% - 20px); /* Adjust width as needed */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+  }
+  
+  .userGuidHeading{
+    background: rgba(0, 0, 0, 0.1);
+    color: black;
+    padding: 10px;
+    border-radius: 7px;
+  }
+  
+  .buttonGroup{
+    margin-top: 25px;
+  }
+
+
+/* Modal styles */
+.dialog-title {
+    background-color: #dbcff1;
+    color: #696767;
+    font-size: 15px !important;
+  }
+  
+  .dialog-content {
+    padding: 30px !important;
+  }
+  
+  .dialog-actions {
+    justify-content: space-between;
+  }
+
+  .content-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .existing-files-section {
+    flex: 1; /* Take more space */
+    margin-right: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  .existing-files-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .existing-files-table th,
+  .existing-files-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .existing-files-table th {
+    /* background-color: #5a1dbf; */
+    /* color: white; */
+  }
+  
+  

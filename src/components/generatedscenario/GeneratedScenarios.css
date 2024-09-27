@@ -1,0 +1,137 @@
+.generated-scenarios-container {
+    padding: 20px;
+    max-width: 950px;
+    margin: 0 auto;
+  }
+  
+  .scenarios-paper {
+    border-radius: 12px;
+    overflow: hidden;
+    padding: 16px;
+  }
+  
+  .scenarios-title {
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 16px;
+    text-align: left;
+    background: linear-gradient(to right, #D66DAB, #6B83D3);
+    color: #fff;
+    padding: 12px;
+    border-radius: 8px;
+  }
+  
+  .title-icon {
+    color: #fff;
+    margin-right: 8px;
+  }
+  
+  .select-all-box {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-left: 12px;
+    margin-top :15px;
+  }
+  
+  .select-all-text {
+    font-weight: 600;
+    font-size: 16px;
+  }
+  
+  .scenario-box {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 16px;
+    padding: 12px 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fff;
+  }
+  
+  .scenario-checkbox {
+    margin-right: 16px;
+  }
+  
+  .scenario-content {
+    flex-grow: 1;
+  }
+  
+  .scenario-name {
+    font-weight: 600;
+    font-size: 16px;
+    color: #333;
+    text-align: left;
+    margin-bottom: 10px;
+    padding: 0 20px; /* Set padding to 0 for top and bottom, 20px for left and right */
+}
+
+  
+  .description-textarea {
+    width: 100%;
+    padding: 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    resize: none;
+    /* min-width: 650px; */
+    max-width: 700px;
+    margin-left: -30px;
+
+  }
+  
+  .description-text {
+    white-space: pre-line;
+    color: #555;
+    font-size: 16px;
+    text-align: left;
+    margin-bottom: 10px;
+    /* border: 1px solid #ccc; */
+    padding: 20px;
+    /* border-radius: 4px; */
+  }
+  
+  .edit-icon {
+    margin-left: auto;
+    color: #6b2ed3;
+  }
+  
+  .edit-icon:hover {
+    color: #4CAF50; /* Change color on hover for Save icon */
+  }
+  
+  .button-container {
+    display: flex;              /* Use flexbox for alignment */
+    justify-content: flex-end;  /* Align items to the right */
+    gap: 10px;                 /* Optional: Add space between buttons */
+    margin-top: 20px;         /* Optional: Add some space above the button container */
+}
+
+  
+  .download-button {
+    text-transform: none;
+    font-weight: 600;
+  }
+  
+  .excel-button {
+    background-color: #6b2ed3 !important;
+    color: #fff !important;
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-transform: none !important;
+  }
+  
+  .feature-button {
+    background-color: #6b2ed3 !important;
+    color: #fff !important;
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-transform: none !important;
+  }
+  

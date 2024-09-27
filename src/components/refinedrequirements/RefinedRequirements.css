@@ -1,0 +1,48 @@
+.user-guide {
+    padding: 20px;
+  }
+  .card-container {
+    display: flex;
+    justify-content: center; 
+  }
+  .card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    width: calc(100% - 10px); /* Adjust width as needed */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+  }
+  .userGuidHeading{
+    /* background: rgba(0, 0, 0, 0.1); */
+    background: linear-gradient(to right, #D66DAB, #6B83D3); /* Gradient */
+    color: white;
+    padding: 10px;
+    border-radius: 7px;
+  }
+  
+  .buttonGroup{
+    margin-top: 10px;
+  }
+
+
+/* Modal styles */
+.dialog-title {
+  background: linear-gradient(to right, #e19ac3, #acbcee); /* Gradient */
+   padding: 12px !important;
+  }
+
+  .modelHeading{
+    margin: 0;
+    color: white;
+    
+  }
+  
+  .dialog-content {
+    padding: 30px !important;
+  }
+  
+  .dialog-actions {
+    justify-content: space-between;
+  }

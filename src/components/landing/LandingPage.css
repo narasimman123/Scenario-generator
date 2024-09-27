@@ -1,0 +1,197 @@
+
+body {
+    /* font-family: 'Arial', sans-serif; */
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+  }
+  
+  .landing-page {
+    display: flex;
+    height: auto; 
+  }
+  
+  .sidebar {
+    width: 60px;
+    background-color: #f8f9fa;
+    padding: 20px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+    box-sizing: border-box; /* Ensure padding doesn't affect overall width/height */
+    overflow: hidden; /* Disable sidebar scrolling */
+  }
+  
+  .sidebar .sidebar-icon {
+    margin-bottom: 20px;
+    color:#8e8e8e
+  }
+  
+  .sidebar-options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px; /* Add space between the icons */
+  }
+  
+  .sidebar-options .icon {
+    font-size: 24px;
+    cursor: pointer;
+    color:#8e8e8e
+  }
+  
+  .sidebar-options .icon:hover {
+    color: #6b2ed3; /* Hover effect to make the icons interactive */
+  }
+  
+  .content {
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+    padding: 40px 40px 0; 
+  }
+  
+  .header-text h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+    background: linear-gradient(to right, #D66DAB, #6B83D3); /* Gradient */
+    background-clip: text;
+    color: transparent;
+  }
+
+  .what{
+    color:black !important;
+  }
+  
+  .header-text h1 span {
+    background: linear-gradient(to right, #D66DAB, #6B83D3); /* Gradient */
+    background-clip: text;
+    color: transparent;
+  }
+  .confluenceTitle{
+    background: linear-gradient(to right, #d35da2, #6B83D3); /* Gradient */
+    background-clip: text;
+    color: transparent;
+  }
+  
+  .header-text p {
+    font-size: 16px;
+    color: #8e8e8e;
+  }
+  
+  .upload-section {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+  }
+  
+  .upload-box {
+    /* border: 2px dashed #cccccc; */
+    width: 550px;
+    height: auto;
+    min-height: 130px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding:10px
+    
+  }
+  
+  .file-list ol {
+    list-style-type: none;  /* Remove default numbering */
+   
+    counter-reset: list-counter; /* Initialize custom counter */
+  }
+  
+  .file-list li {
+    margin-bottom: 5px;
+    overflow: hidden;          /* Hide overflowing content */
+    text-overflow: ellipsis;   /* Add ellipsis when text is too long */
+    white-space: nowrap;       /* Prevent text from wrapping */
+    max-width: 500px;          /* Adjust to fit within the upload box */
+    counter-increment: list-counter; /* Increment counter for each item */
+    text-align: "left";
+  }
+  
+  .file-list li::before {
+    content: counter(list-counter) ") "; /* Custom format for the numbering */
+    margin-right: 5px;       /* Add space between the number and the text */
+  }
+  
+  
+  .upload-box p {
+    font-size: 18px;
+    margin: 10px 0;
+  }
+  
+  .upload-box span {
+    color: #6b2ed3;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .upload-box small {
+    font-size: 12px;
+    color: #aaaaaa;
+  }
+  
+  .or-text {
+    margin: 20px 0;
+    font-size: 16px;
+  }
+  
+  .upload-button {
+    background-color: #6b2ed3 !important;
+    color: #fff !important;
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .nextButton{
+    background-color: #6b2ed3;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .upload-button:hover {
+    background-color: #5931b6;
+  }
+
+
+.stepper {
+  margin-bottom: 30px;
+  /* padding: 20px; */
+}
+
+.footer {
+  /* border-top: 1px solid #ccc;
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+  background-color: #f8f8f8; */
+
+  padding: 10px;
+  background-color: #f1f1f1;
+  text-align: center;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  border-top: 1px solid #ddd;
+  margin-top: auto; /* Pushes the footer to the bottom */
+}
+
+
+  
