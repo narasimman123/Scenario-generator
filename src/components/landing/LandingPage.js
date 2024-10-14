@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUpload } from '@fortawesome/free-solid-svg-icons';
-import { Stepper, Step, StepLabel, Button, Dialog, DialogActions, DialogContent, DialogContentText, CircularProgress } from '@mui/material';
+import { Stepper, Step, StepLabel, Button, Dialog, DialogContent, DialogContentText } from '@mui/material';
 import './LandingPage.css'; 
 import UserGuide from '../userguid/userGuide'; 
 import RefinedRequirements from '../refinedrequirements/RefinedRequirements';
@@ -9,7 +9,10 @@ import GeneratedScenarios from '../generatedscenario/GeneratedScenarios';
 import axios from 'axios'; 
 import UploadConfluenceAccount from './UploadConfluenceAccount';
 import Sidebar from '../Sidebar';
-import Loader from '../loader/Loader'; // Import the Loader component
+import Loader from '../loader/Loader';
+import CloudDoneTwoToneIcon from '@mui/icons-material/CloudDoneTwoTone';
+import Footer from '../footer/Footer';
+
 
 const steps = [
   'Landing Page',
@@ -19,7 +22,7 @@ const steps = [
 ];
 
 const LandingPage = () => {
-
+  const userGuideRef = useRef();
   const [landingFileUploadResponse, setLandingFileUploadResponse] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [uploadStatus, setUploadStatus] = useState(null); 
@@ -27,11 +30,11 @@ const LandingPage = () => {
   const [isLoading, setIsLoading] = useState(false); 
   const [openModal, setOpenModal] = useState(false);
   const [isFullPageLoading, setIsFullPageLoading] = useState(false); // New state for full page loader
-
+ 
   const handleOpenModal = () => {
-    setLandingFileUploadResponse(null); // Clear the response when opening the modal
-    setOpenModal(true); // Open the modal
-  };
+    setLandingFileUploadResponse(null);
+    setOpenModal(true); 
+  }; 
   const handleCloseModal = () => setOpenModal(false);
 
   const [activeStep, setActiveStep] = useState(() => {
@@ -44,46 +47,64 @@ const LandingPage = () => {
     setSelectedFiles(files);
   };
 
-  const handleNext = () => {
+  // Handle file drop via drag-and-drop
+  const handleDrop = (e) => {
+    e.preventDefault();
+    const files = Array.from(e.dataTransfer.files);
+    setSelectedFiles(files);
+  };
+
+  // Prevent the default behavior for dragover to allow dropping
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleFileUpload  = async () => {
+
+    if (activeStep === 0 && selectedFiles.length > 0) {
+      if (selectedFiles.length === 0) {
+        setUploadStatus('No files selected');
+        return;
+      }
+      const formData = new FormData();
+      formData.append('file', selectedFiles[0]); 
+      
+      setIsLoading(true); 
+      setIsFullPageLoading(true);
+      localStorage.setItem('uploadedFileName', selectedFiles[0]?.name); 
+      try {
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/connection_creation`, 
+        formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        setLandingFileUploadResponse(response);
+        setUploadStatus('File uploaded successfully');
+        setSelectedFiles([]); 
+        setOpenDialog(true);
+        localStorage.setItem('landingFileUploadResponse', JSON.stringify(landingFileUploadResponse)); 
+        
+      } catch (error) {
+        setUploadStatus('File upload failed');
+        setOpenDialog(false); 
+      } finally {
+        setIsLoading(false); 
+        setIsFullPageLoading(false); 
+      }
+    }else{
+      if (userGuideRef.current) {
+        console.log("reference",userGuideRef)
+        await userGuideRef.current.uploadFiles(); // Call the method in UserGuide
+      }
+    }
     if (activeStep < steps.length - 1) {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
   };
-
+  
   const handleCloseDialog = () => {
     setOpenDialog(false);
-  };
-
-  const handleUpload = async () => {
-    if (selectedFiles.length === 0) {
-      setUploadStatus('No files selected');
-      return;
-    }
-    const formData = new FormData();
-    formData.append('file', selectedFiles[0]); 
-    setIsLoading(true); 
-    setIsFullPageLoading(true); // Show full page loader
-    localStorage.setItem('uploadedFileName', selectedFiles[0]?.name); 
-
-    try {
-      const response = await axios.post('http://127.0.0.1:5000/api/connection_creation', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      setLandingFileUploadResponse(response);
-      setUploadStatus('File uploaded successfully');
-      setSelectedFiles([]);
-      setOpenDialog(true); 
-      localStorage.setItem('landingFileUploadResponse', JSON.stringify(landingFileUploadResponse));
-
-    } catch (error) {
-      setUploadStatus('File upload failed');
-      setOpenDialog(false); 
-    } finally {
-      setIsLoading(false); 
-      setIsFullPageLoading(false); // Hide full page loader
-    }
   };
 
   useEffect(() => {
@@ -106,7 +127,11 @@ const LandingPage = () => {
               <p>Submit your requirements file here</p>
             </header>
             <div className="upload-section">
-              <div className="upload-box">
+            <div
+              className="upload-box"
+              onDragOver={handleDragOver}
+              onDrop={handleDrop}
+            >
                 <FontAwesomeIcon icon={faUpload} size="2x" />
                 <input
                   type="file"
@@ -122,26 +147,24 @@ const LandingPage = () => {
                 {/* <small>Only JPEG, PNG, GIF, and PDF files with a max size of 15MB.</small> */}
                 {selectedFiles.length > 0 && (
                 <div className="file-list">
-                  <ol>
+                   <p className="uploaded-text">Uploaded Files &nbsp; <CloudDoneTwoToneIcon /></p> 
+                  <ul>
                     {selectedFiles.map((file, index) => (
                       <li key={index}>{file.name}</li>
                     ))}
-                  </ol>
-                  <button className="upload-button" onClick={handleUpload} disabled={isLoading}>
-                    {isLoading ? 'Uploading...' : 'Upload Files'}
-                  </button>
+                  </ul>
                 </div>
               )}
               </div>
               <p className="or-text">OR</p>
               <button className="upload-button" onClick={handleOpenModal}>Upload from your Confluence account</button>
-              <UploadConfluenceAccount open={openModal} onClose={handleCloseModal} />
+              <UploadConfluenceAccount open={openModal} onClose={handleCloseModal}  />
             </div>
           </div>
         );
 
       case 1:
-        return <UserGuide />; 
+        return <UserGuide ref={userGuideRef}/>; 
 
       case 2:
         return <RefinedRequirements setActiveStep={setActiveStep} landingFileUploadResponse={landingFileUploadResponse}  />; 
@@ -154,6 +177,15 @@ const LandingPage = () => {
     }
   };
 
+  useEffect(() => {
+    if (openDialog) {
+      const timer = setTimeout(() => {
+        setOpenDialog(false); 
+      }, 3000);
+      return () => clearTimeout(timer); 
+    }
+  }, [openDialog]);
+  
   return (
     <div className="landing-page">
       <Sidebar />
@@ -165,68 +197,23 @@ const LandingPage = () => {
             </Step>
           ))}
         </Stepper>
-
         {renderStepContent()}
-
-        <Dialog open={openDialog} onClose={handleCloseDialog} sx={{ '& .MuiDialog-paper': { borderRadius: '5px', width:"380px" } }}>
+        <Dialog open={openDialog} onClose={handleCloseDialog} sx={{ '& .MuiDialog-paper': { borderRadius: '5px', width: "380px" } }}>
           <DialogContent>
             <DialogContentText sx={{ color: '#333', textAlign: 'center', fontSize: '16px' }}>
               <p>{uploadStatus} !</p>
             </DialogContentText>
           </DialogContent>
-          <DialogActions sx={{ justifyContent: 'center' }}>
-            <Button onClick={handleCloseDialog} color="primary" sx={{ backgroundColor: '#5a1dbf', color: 'white', '&:hover': { backgroundColor: '#6b2ed342' } }}>
-              OK
-            </Button>
-          </DialogActions>
         </Dialog>
-
-        <footer className="footer">
-  {activeStep > 0 && (
-    <Button
-      sx={{
-        textTransform: 'none',
-        border: '1px solid #6b2ed3',
-        color: 'black',
-        marginRight: '10px'
-      }}
-      className="backButton"
-      onClick={() => {
-        if (activeStep === steps.length - 1) {
-          // Clear local storage when going back to the first page
-          localStorage.clear();
-          setActiveStep(0);
-        } else {
-          setActiveStep((prevActiveStep) => prevActiveStep - 1);
-          localStorage.clear();
-        }
-      }}
-    >
-      {activeStep === steps.length - 1 ? 'Back to First Page' : 'Back'}
-    </Button>
-  )}
-  {activeStep !== 2 && activeStep < steps.length - 1 && (
-    <div className="button-group">
-      <Button
-        sx={{
-          textTransform: 'none',
-          backgroundColor: '#6b2ed3',
-          color: '#fff'
-        }}
-        className="nextButton"
-        onClick={handleNext}
-      >
-        Next
-      </Button>
-    </div>
-  )}
-</footer>
-
+          <Footer
+            activeStep={activeStep}
+            steps={steps}
+            setActiveStep={setActiveStep}
+            handleNext={handleFileUpload }
+          />
       </div>
-
       {isFullPageLoading &&  <Loader />  } {/* Show the loader when uploading */}
     </div>
   );
 };
-
 export default LandingPage;

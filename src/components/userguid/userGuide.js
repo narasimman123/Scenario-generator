@@ -1,24 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import './userGuide.css';
 import { faUpload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText } from '@mui/material';
+import CloudDoneTwoToneIcon from '@mui/icons-material/CloudDoneTwoTone';
+import Loader from '../loader/Loader';
 
-const UserGuide = () => {
+const UserGuide =  forwardRef((props, ref) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [uploadStatus, setUploadStatus] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [existingFiles, setExistingFiles] = useState([]);
   const [checkedFiles, setCheckedFiles] = useState({});
-  const [errorMessage, setErrorMessage] = useState(''); // For storing error messages
-  const [selectAll, setSelectAll] = useState(false); // Tracks "select all" checkbox state
+  const [errorMessage, setErrorMessage] = useState(''); 
+  const [selectAll, setSelectAll] = useState(false); 
+  const [isFullPageLoading, setIsFullPageLoading] = useState(false); 
 
+  // Fetch existing file names
   useEffect(() => {
     const fetchFileNames = async () => {
       try {
-        const response = await axios.get('http://172.17.6.90:5000/api/get_filenames');
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/get_filenames`);
         const uniqueFilenames = [...new Set(response.data.filenames)];
         setExistingFiles(uniqueFilenames); 
       } catch (error) {
@@ -36,15 +40,20 @@ const UserGuide = () => {
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
-    setUploadStatus(null); // Reset after closing the dialog
+    setUploadStatus(null); 
     setSelectedFiles([]);
-    setErrorMessage(''); // Clear any error message
+    setErrorMessage('');
   };
 
+  // Expose the upload function to the parent via ref
+  useImperativeHandle(ref, () => ({
+    uploadFiles: handleFileUpload,
+  }));
+
   // Handle file upload
-  const handleUpload = async () => {
+  const handleFileUpload = async () => {
     if (selectedFiles.length === 0) {
-      alert('Please select files to upload.');
+      // alert('Please select files to upload.');
       return;
     }
     // Check for duplicates
@@ -52,7 +61,7 @@ const UserGuide = () => {
     if (duplicateFiles.length > 0) {
       setErrorMessage(`The following files already exist: ${duplicateFiles.map(file => file.name).join(', ')}`);
       setOpenDialog(true);
-      return; // Stop the upload if there are duplicates
+      return;
     }
     const formData = new FormData();
     selectedFiles.forEach((file) => {
@@ -61,7 +70,8 @@ const UserGuide = () => {
     localStorage.setItem('userGuideFileName', selectedFiles[0]?.name); 
     try {
       setIsLoading(true);
-      const response = await axios.post('http://172.17.6.90:5000/api/upload_user_guide', formData, {
+      setIsFullPageLoading(true);
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/upload_user_guide`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -81,6 +91,7 @@ const UserGuide = () => {
       console.error('Error:', error);
     } finally {
       setIsLoading(false);
+      setIsFullPageLoading(false); 
     }
   };
 
@@ -102,13 +113,28 @@ const UserGuide = () => {
     setCheckedFiles(newCheckedFiles);
   };
 
+  // Handle file drop via drag-and-drop
+  const handleDrop = (e) => {
+    e.preventDefault();
+    const files = Array.from(e.dataTransfer.files);
+    setSelectedFiles(files);
+  };
+
+  // Prevent the default behavior for dragover to allow dropping
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  
+
+
   return (
     <div className="user-guide">
       <div className="container">
         {/* Upload Section */}
         <div className="upload-section">
           <header className="header-text"><h1>User Guide </h1></header>
-          <div className="upload-box">
+          <div className="upload-box" onDragOver={handleDragOver} onDrop={handleDrop}>
             <FontAwesomeIcon icon={faUpload} size="2x" />
             <input
               type="file"
@@ -121,18 +147,15 @@ const UserGuide = () => {
             <label htmlFor="file-upload" className="upload-label">
               <p>Drag & Drop or <span>Browse</span></p>
             </label>
-            <small>Only JPEG, PNG, GIF, and PDF files with a max size of 15MB.</small>
 
             {selectedFiles.length > 0 && (
               <div className="file-list">
+                <p className="uploaded-text">Uploaded Files &nbsp; <CloudDoneTwoToneIcon /></p> 
                 <ul>
                   {selectedFiles.map((file, index) => (
                     <li key={index}>{file.name}</li>
                   ))}
                 </ul>
-                <button className="upload-button" onClick={handleUpload} disabled={isLoading}>
-                  {isLoading ? 'Uploading...' : 'Upload Files'}
-                </button>
               </div>
             )}
 
@@ -185,8 +208,9 @@ const UserGuide = () => {
           </table>
         </div>
       </div>
+      {isFullPageLoading &&  <Loader />  } {/* Show the loader when uploading */}
     </div>
   );
-};
+});
 
 export default UserGuide;

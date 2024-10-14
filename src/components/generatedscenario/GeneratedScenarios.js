@@ -82,15 +82,19 @@ const GeneratedScenarios = () => {
       alert("No scenarios selected for download.");
       return;
     }
-    const worksheet = XLSX.utils.json_to_sheet(selectedScenarios);
+    const formattedScenarios = selectedScenarios.map(scenario => ({
+      Scenario: scenario.name, // Change 'name' to 'Scenario'
+      Description: scenario.value // Change 'value' to 'Description'
+    }));
+    const worksheet = XLSX.utils.json_to_sheet(formattedScenarios);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Scenarios');
-
+  
     const uploadedFileName = localStorage.getItem('uploadedFileName');
-    
     const fileName = uploadedFileName ? `${uploadedFileName.split('.')[0]}.xlsx` : 'default.xlsx';
     XLSX.writeFile(workbook, fileName);
   };
+  
 
   const downloadFeatureFormat = () => {
     const selectedScenarios = scenarioData.filter((_, index) => checkedScenarios[index]);
@@ -98,7 +102,9 @@ const GeneratedScenarios = () => {
       alert("No scenarios selected for download.");
       return;
     }
-    const featureData = selectedScenarios.map((scenario) => `${scenario.name}: ${scenario.value}`).join('\n');
+    const featureData = selectedScenarios.map((scenario) => 
+      `SCENARIO : ${scenario.name}\nDESCRIPTION : ${scenario.value}`
+    ).join('\n\n'); 
     const blob = new Blob([featureData], { type: 'text/plain' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
@@ -107,7 +113,7 @@ const GeneratedScenarios = () => {
     link.download = fileName;
     link.click();
   };
-
+  
   const handleSelectAllChange = () => {
     const newCheckedState = !selectAll;
 

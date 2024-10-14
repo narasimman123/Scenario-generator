@@ -108,7 +108,7 @@ const RefinedRequirements = ({ setActiveStep, landingFileUploadResponse }) => {
         ? landingFileUploadResponse.data.result 
         : confluenceAccountParsedData?.data?.result || '';
   
-    const apiUrl = `http://127.0.0.1:5000/api/generate_gherkin?user_feedback=yes&updated_response=&user_query=${encodeURIComponent(user_query)}&filename=`;
+    const apiUrl = `${process.env.REACT_APP_API_URL}/api/generate_gherkin?user_feedback=yes&updated_response=&user_query=${encodeURIComponent(user_query)}&filename=`;
     try {
       const response = await fetch(apiUrl, {
         method: 'GET',
@@ -155,7 +155,7 @@ const RefinedRequirements = ({ setActiveStep, landingFileUploadResponse }) => {
       : confluenceAccountParsedData?.data?.result || '';
     
     const updated_response = value;
-    const apiUrl = `http://127.0.0.1:5000/api/generate_gherkin?user_feedback=no&updated_response=${encodeURIComponent(updated_response)}&user_query=${encodeURIComponent(user_query)}&filename=`;
+    const apiUrl = `${process.env.REACT_APP_API_URL}/api/generate_gherkin?user_feedback=no&updated_response=${encodeURIComponent(updated_response)}&user_query=${encodeURIComponent(user_query)}&filename=`;
 
     try {
       const response = await fetch(apiUrl, {

@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect  } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, CircularProgress  } from '@mui/material';
 import WebIcon from '@mui/icons-material/Web';
 import axios from 'axios'; 
 
-const UploadConfluenceAccount = ({ open, onClose }) => {
+const UploadConfluenceAccount  = ({open, onClose} ) => { 
 
     const [confluenceAccount, setConfluenceAccount] = useState([]);
     const [confluenceAccountResponse, setconfluenceAccountResponse] = useState([]);
@@ -47,7 +47,7 @@ const UploadConfluenceAccount = ({ open, onClose }) => {
         formData.append('space_key', formValues.siteId);
         formData.append('server_url', formValues.serverUrl);
 
-        const response = await axios.post('http://127.0.0.1:5000/api/connection_creation', formData, {
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/connection_creation`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data', // Set the content type
         },
@@ -67,6 +67,7 @@ const UploadConfluenceAccount = ({ open, onClose }) => {
       localStorage.setItem('confluenceAccountResponse', JSON.stringify(confluenceAccountResponse));
     }
   }, [confluenceAccountResponse]);
+
 
   return (
     <Dialog
@@ -137,7 +138,7 @@ const UploadConfluenceAccount = ({ open, onClose }) => {
         </Button>
       </DialogActions>
     </Dialog>
-  );
+ );
 };
 
 export default UploadConfluenceAccount;

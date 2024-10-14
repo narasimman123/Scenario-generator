@@ -102,12 +102,22 @@ body {
     padding:10px
     
   }
-  
-  .file-list ol {
-    list-style-type: none;  /* Remove default numbering */
-   
-    counter-reset: list-counter; /* Initialize custom counter */
+
+  .uploaded-text {
+    display: flex;         /* Aligns items in a row */
+    justify-content: center; /* Centers the text and icon horizontally */
+    align-items: center;     /* Centers the text and icon vertically */
+    font-size: 16px;         /* Adjust font size if needed */
+    margin: 0;               /* Ensure no extra margin */
+    padding: 0;              /* Ensure no extra padding */
   }
+  
+  
+  /* .file-list ol {
+    list-style-type: none;  
+   
+    counter-reset: list-counter; 
+  } */
   
   .file-list li {
     margin-bottom: 5px;
